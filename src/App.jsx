@@ -1,44 +1,73 @@
 import { useState, useEffect } from 'react';
-import { Phone, ShieldCheck, Wrench, Thermometer, MapPin, Clock } from 'lucide-react';
+import { Phone, ShieldCheck, Wrench, Thermometer, MapPin, Clock, Menu, X } from 'lucide-react';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 ${
-      isScrolled 
-        ? 'bg-deep-navy/90 backdrop-blur-md py-4 shadow-lg shadow-black/20' 
-        : 'bg-transparent py-6'
-    }`}>
-      <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center">
-        <div className="text-xl md:text-2xl font-bold tracking-tight text-white uppercase">
-          Auto Serwis <span className="text-brand-orange">Premium</span>
-        </div>
-        <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-2 text-steel-gray hover:text-white transition-colors">
-            <Phone className="text-brand-orange" size={20} />
-            <span className="font-semibold text-lg tracking-wide">+48 123 456 789</span>
+    <>
+      <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-deep-navy/80 backdrop-blur-xl py-4 border-b border-white/5 shadow-lg shadow-black/20' 
+          : 'bg-transparent py-6'
+      }`}>
+        <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center">
+          <div className="text-xl md:text-2xl font-bold tracking-tight text-white uppercase">
+            Auto Serwis <span className="text-brand-orange">Premium</span>
           </div>
-          <a href="tel:+48123456789" className="bg-brand-orange hover:bg-[#E66000] text-white px-6 py-2.5 rounded-xl font-semibold transition-all shadow-lg shadow-brand-orange/20 active:scale-95 border border-transparent hover:border-white/10">
+          
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center gap-6">
+            <div className="flex items-center gap-2 text-steel-gray hover:text-white transition-colors">
+              <Phone className="text-brand-orange" size={20} />
+              <span className="font-semibold text-lg tracking-wide">+48 123 456 789</span>
+            </div>
+            <a href="tel:+48123456789" className="bg-brand-orange hover:bg-[#E66000] text-white px-6 py-2.5 rounded-xl font-semibold transition-all shadow-lg shadow-brand-orange/20 active:scale-95 border border-transparent hover:border-white/10">
+              Zadzwoń teraz
+            </a>
+          </div>
+
+          {/* Mobile Toggle */}
+          <button 
+            className="md:hidden text-white focus:outline-none"
+            onClick={() => setIsOpen(true)}
+          >
+            <Menu size={28} />
+          </button>
+        </div>
+
+        {/* Animated horizontal white line */}
+        <div 
+          className="absolute bottom-0 left-0 h-[1px] bg-white/10 transition-all duration-700 ease-out" 
+          style={{ width: isScrolled ? '100%' : '0%' }}
+        />
+      </nav>
+
+      {/* Luksusowe Mobilne Menu - Wjazd od prawej */}
+      <div className={`fixed top-0 right-0 h-[100dvh] w-full max-w-sm bg-deep-navy/95 backdrop-blur-2xl z-50 transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="p-6 flex justify-end">
+          <button onClick={() => setIsOpen(false)} className="text-white hover:text-brand-orange transition-colors">
+            <X size={32} />
+          </button>
+        </div>
+        <div className="flex flex-col items-center justify-center h-3/4 space-y-8 px-6">
+          <div className="flex items-center gap-2 text-white">
+            <Phone className="text-brand-orange" size={24} />
+            <span className="font-semibold text-2xl tracking-wide">+48 123 456 789</span>
+          </div>
+          <a href="tel:+48123456789" onClick={() => setIsOpen(false)} className="w-full text-center bg-brand-orange hover:bg-[#E66000] text-white px-8 py-4 rounded-xl font-bold text-xl transition-all shadow-lg shadow-brand-orange/20 border border-transparent hover:border-white/10 active:scale-95">
             Zadzwoń teraz
           </a>
         </div>
       </div>
-      {/* Animated horizontal white line */}
-      <div 
-        className="absolute bottom-0 left-0 h-[1px] bg-white/10 transition-all duration-700 ease-out" 
-        style={{ width: isScrolled ? '100%' : '0%' }}
-      />
-    </nav>
+    </>
   );
 }
 
